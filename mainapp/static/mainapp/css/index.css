@@ -1,0 +1,25 @@
+#menu {
+    width: 200px;
+    height: 200px;
+    /*background-color: #CE2D4D;*/
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin:-100px 0 0 -100px;
+}
+
+ul {
+    list-style: none;
+    color: #3498db;
+    font-family: "Helvetica Neue", sans-serif;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+li:hover {
+    background-color: #1abc9c;
+}
+
+body {
+    background-color: #34495e;
+}
