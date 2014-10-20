@@ -2,16 +2,19 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
+    <link href='http://fonts.googleapis.com/css?family=Raleway:200' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="{% static "mainapp/css/index.css" %}">
     <meta charset="UTF-8">
     <title></title>
 </head>
 <body>
+
+    <h1>BASTION</h1>
     <div id="menu">
         <ul>
-            <li>About</li>
-            <li>Projects</li>
-            <li>Contact</li>
+            <li><a href={% url 'about' %}>About</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Contact</a></li>
         </ul>
     </div>
 </body>

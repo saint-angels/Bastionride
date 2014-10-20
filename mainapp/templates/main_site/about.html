@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/about.css" %}>
+    <style type="text/css">
+        html {font-family: "Raleway", sans-serif;}
+    </style>
+    <meta charset="UTF-8">
+    <title>About</title>
+</head>
+<body>
+    <ul id="menu">
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a id ="current_menu_tab" href="{% url 'about' %}">About</a></li>
+        <li><a href="#">Projects</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+
+    <div id="about_me">
+        <img src={% static "mainapp/images/hound.svg" %} />
+        <div id="about_text">
+            <h3>Who am I</h3>
+                <p>
+                I'm Mike. I have a lot of skills. Hacking skills, gaming skills, drawing vector foxes skills and shooting saints with iPhone skills.
+                I wonder if there are any times on the clock that I have never seen.
+                </p>
+            <h3>How to contact me</h3>
+                You can send me an email to <a class="address" href="mailto:mikeprokofyev@gmail.com">mikeprokofyev at gmail dot com</a>
+
+
+        </div>
+        
+    </div>
+
+</body>
+</html>
