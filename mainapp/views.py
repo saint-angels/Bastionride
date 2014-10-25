@@ -7,3 +7,7 @@ def index(request):
 
 def about(request):
     return render(request, 'main_site/about.html', {})
+
+
+def gallery(request):
+    return render(request, 'main_site/gallery.html', {})

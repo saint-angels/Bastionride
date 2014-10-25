@@ -1,0 +1,37 @@
+#footer {
+     clear: both;
+     position: relative;
+     height: 50px;
+    color: white;
+    font-size: 0.8em;
+    text-align: center;
+}
+
+#footer > ul {
+    list-style: none;
+}
+
+#footer > ul > li{
+    position: relative;
+    text-decoration: none;
+    color: #ffffff;
+    font-family: "Raleway", sans-serif;
+    font-weight: 300;
+    font-size: 2em;
+    display: inline;
+    margin:0 20px 20px 0;
+}
+
+#footer > ul > li > img{
+    width: 70px;
+    height: 70px;
+    display: block;
+    margin: 0 auto;
+}
+
+#footer_border {
+    border-top: 1px solid white;
+    width: 70%;
+    clear: both;
+    margin: 0 auto 10px;
+}

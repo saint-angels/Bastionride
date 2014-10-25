@@ -5,16 +5,25 @@
     <link href='http://fonts.googleapis.com/css?family=Raleway:200' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="{% static "mainapp/css/index.css" %}">
     <meta charset="UTF-8">
-    <title></title>
+    <style type="text/css">
+        @font-face {
+            font-family: 'GoodFoot';
+            src: url({% static "mainapp/fonts/goodfoot.ttf" %});
+        }
+        @font-face {
+            font-family: 'Mohave';
+            src: url({% static "mainapp/fonts/Mohave.otf" %});
+        }
+    </style>
+    <title>Bastion</title>
 </head>
 <body>
 
-    <h1>BASTION</h1>
+    <h1>Bastion</h1>
     <div id="menu">
         <ul>
             <li><a href={% url 'about' %}>About</a></li>
-            <li><a href="#">Projects</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="{% url 'gallery' %}">Gallery</a></li>
         </ul>
     </div>
 </body>

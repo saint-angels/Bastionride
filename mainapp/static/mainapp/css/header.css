@@ -1,0 +1,32 @@
+ul#menu {
+    width: 90%;
+    height: 50px;
+    /*border: 1px solid #ffffff;*/
+    margin: 0 auto;
+    clear:both;
+}
+
+ul#menu > li > a {
+   text-decoration: none;
+    text-align: center;
+    color: #ffffff;
+    font-weight: 300;
+    font-size: 2em;
+}
+
+ul#menu li {
+    display: inline;
+    margin-right: 5px;
+    padding: 3px;
+    position: relative;
+}
+
+#current_menu_tab:before  {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: 0px;
+  left: 0;
+  background-color: #ffffff;
+}

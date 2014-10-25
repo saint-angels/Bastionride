@@ -2,7 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/header.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "mainapp/css/about.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/footer.css" %}>
     <style type="text/css">
         html {font-family: "Raleway", sans-serif;}
     </style>
@@ -13,24 +15,29 @@
     <ul id="menu">
         <li><a href="{% url 'index' %}">Home</a></li>
         <li><a id ="current_menu_tab" href="{% url 'about' %}">About</a></li>
-        <li><a href="#">Projects</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="{% url 'gallery' %}">Gallery</a></li>
     </ul>
-
-    <div id="about_me">
-        <img src={% static "mainapp/images/hound.svg" %} />
+    <div class="main_wrapper">
+        <div class="push"></div>
+        <img id="main_image" alt="fox image" src={% static "mainapp/images/hound.svg" %} />
         <div id="about_text">
             <h3>Who am I</h3>
                 <p>
-                I'm Mike. I have a lot of skills. Hacking skills, gaming skills, drawing vector foxes skills and shooting saints with iPhone skills.
-                I wonder if there are any times on the clock that I have never seen.
+                    I'm Mike and I have a lot of skills. Drawing vector foxes skills, to be precise.
+                    I wonder if there are any times on the clock that I have never seen. Myhandsaretypingstuff
                 </p>
             <h3>How to contact me</h3>
-                You can send me an email to <a class="address" href="mailto:mikeprokofyev@gmail.com">mikeprokofyev at gmail dot com</a>
-
-
+                <p>
+                     You can find me on <a class="address" href="https://facebook.com/mike.prokofyev.1">Facebook</a> and <a class="address" href="http://vk.com/prokoffyev">Twitter</a>.
+                    Also, you can send me an email to <a class="address" href="mailto:mikeprokofyev@gmail.com">mikeprokofyev at gmail dot com</a>
+                </p>
         </div>
-        
+        <div class="push"></div>
+    </div>
+
+    <div id="footer">
+        <div id="footer_border"></div>
+        By visiting this site, you're accepting <a href="https://en.wikipedia.org/wiki/Declaration_of_Arbroath">declaration of Scottish independence</a>
     </div>
 
 </body>

@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/header.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/gallery.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/footer.css" %}>
+    <style type="text/css">
+        html {font-family: "Raleway", sans-serif;}
+    </style>
+    <meta charset="UTF-8">
+    <title>About</title>
+</head>
+<body>
+    <ul id="menu">
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a id ="current_menu_tab" href="{% url 'gallery' %}">Gallery</a></li>
+    </ul>
+    <div class="main_wrapper">
+        <div class="push"></div>
+        <img id="main_image" alt="artbook image" src={% static "mainapp/images/gallery_.jpg" %} />
+        <div id="about_text">Something cool gonna be here</div>
+        <div class="push"></div>
+    </div>
+
+    <div id="footer">
+        <div id="footer_border"></div>
+        By visiting this site, you're accepting that JFK was killed by umbrella man
+    </div>
+
+</body>
+</html>

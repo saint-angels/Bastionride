@@ -6,33 +6,26 @@ html, body {
 .main_wrapper {
     width: 90%;
     min-height: 100%;
-    height: 100%;
+    /*height: 100%;*/
     margin: -50px auto -50px;
     /*border: 1px solid white;*/
 }
 
 #about_text {
     width: 50%;
-    margin: 0 auto;
+    margin: 0 auto 20px;
     color: #ffffff;
-    font-size: 1em;
-}
-
-h3 {
-    font-weight: 400;
-}
-
-a {
-    color: #ffffff;
-    font-weight: 600;
-    text-decoration: none;
+    /*text-align: center;*/
+    font-weight: 200;
+    font-size: 1.7em;
+    font-family: "Helvetica Neue", sans-serif;
 }
 
 #main_image {
     display: block;
     /*border: 1px solid white;*/
-    margin: 0 auto;
-    width: 50% !important;
+    margin: 20px auto 30px;
+    width: 37% !important;
     height: auto !important;
     clear: both;
 }
