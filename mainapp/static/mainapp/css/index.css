@@ -2,7 +2,7 @@ body {
     background-color: #191919;
 }
 
-h1 {
+#title {
     text-align:center;
     font-size:10em;
     margin:20px auto 20px;
@@ -17,6 +17,8 @@ h1 {
     height: 200px;
     margin: 0 auto;
     clear: both;
+    text-align: center;
+    /*border: solid 2px #ffffff;*/
 }
 ul {  list-style: none; }
 
@@ -52,4 +54,26 @@ li > a:hover:before {
   visibility: visible;
   -webkit-transform: scaleX(1);
   transform: scaleX(1);
+}
+
+@media only screen and (max-device-width: 480px){
+    #menu {
+        font-size: 3em;
+        width: 90%;
+        height:80%;
+    }
+    #title {
+        font-size: 14em;
+    }
+}
+
+@media only screen and (max-width: 480px){
+    #menu {
+        font-size: 1.1em;
+        width: 90%;
+        height:80%;
+    }
+    #title {
+        font-size: 10em;
+    }
 }

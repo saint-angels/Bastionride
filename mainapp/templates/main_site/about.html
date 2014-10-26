@@ -12,11 +12,11 @@
     <title>About</title>
 </head>
 <body>
-    <ul id="menu">
-        <li><a href="{% url 'index' %}">Home</a></li>
-        <li><a id ="current_menu_tab" href="{% url 'about' %}">About</a></li>
-        <li><a href="{% url 'gallery' %}">Gallery</a></li>
-    </ul>
+        <ul id="menu">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a id ="current_menu_tab" href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'gallery' %}">Gallery</a></li>
+        </ul>
     <div class="main_wrapper">
         <div class="push"></div>
         <img id="main_image" alt="fox image" src={% static "mainapp/images/hound.svg" %} />
@@ -37,7 +37,9 @@
 
     <div id="footer">
         <div id="footer_border"></div>
-        By visiting this site, you're accepting <a href="https://en.wikipedia.org/wiki/Declaration_of_Arbroath">declaration of Scottish independence</a>
+        <div id="footer_text">
+            By visiting this site, you're accepting <a href="https://en.wikipedia.org/wiki/Declaration_of_Arbroath">declaration of Scottish independence</a>
+        </div>
     </div>
 
 </body>

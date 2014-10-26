@@ -35,3 +35,30 @@
     clear: both;
     margin: 0 auto 10px;
 }
+
+#footer_text {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+@media only screen and (max-device-width: 480px){
+    #footer_text {
+        font-size: 2.5em;
+    }
+
+    #footer_border {
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width: 650px){
+
+    #footer_text {
+        font-size: 1.5em;
+    }
+
+    #footer_border {
+        width: 90%;
+    }
+}
