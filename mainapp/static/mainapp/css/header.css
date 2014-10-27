@@ -1,15 +1,14 @@
 ul { margin: 0; padding: 0; }
 
-#header {
-    height: 50px;
-    margin: 0 auto;
-    clear:both;
-}
+/*#header {*/
+    /*height: 50px;*/
+    /*margin: 0 auto;*/
+    /*clear:both;*/
+/*}*/
 
 ul#menu {
     width: 70%;
     margin: 0 auto;
-    /*clear:both;*/
     /*border: 1px solid white;*/
 }
 
@@ -21,9 +20,12 @@ ul#menu > li > a {
     font-size: 2em;
 }
 
+ul#menu > li:not(:last-child) {
+    margin-right: 5px;
+}
+
 ul#menu > li {
     display: inline;
-    margin-right: 5px;
     position: relative;
 }
 
@@ -55,13 +57,19 @@ ul#menu > li {
     ul#menu {
         width: 90%;
         margin: 0 auto;
-        text-align: center;
     }
 
     ul#menu > li > a {
         font-size: 2em;
     }
 
+}
+
+@media only screen and (max-width: 600px) {
+    ul#menu {
+        width: 80%;
+        text-align: center;
+    }
 }
 
 @media only screen and (max-width: 700px) {
