@@ -1,12 +1,16 @@
+ul { margin: 0; padding: 0; }
+
 #header {
-    width: 90%;
     height: 50px;
     margin: 0 auto;
     clear:both;
 }
 
 ul#menu {
-    /*border: 1px solid #ffffff;*/
+    width: 70%;
+    margin: 0 auto;
+    /*clear:both;*/
+    /*border: 1px solid white;*/
 }
 
 ul#menu > li > a {
@@ -20,7 +24,6 @@ ul#menu > li > a {
 ul#menu > li {
     display: inline;
     margin-right: 5px;
-    padding: 3px;
     position: relative;
 }
 
@@ -37,8 +40,9 @@ ul#menu > li {
 
 @media only screen and (max-device-width: 480px) {
     ul#menu {
-        /*margin: 0 auto;*/
-        /*text-align: center;*/
+        width: 90%;
+        margin: 0 auto;
+        text-align: center;
     }
 
     ul#menu > li > a {
@@ -49,12 +53,19 @@ ul#menu > li {
 
 @media only screen and (max-width: 480px) {
     ul#menu {
-        /*margin: 0 auto;*/
-        /*text-align: center;*/
+        width: 90%;
+        margin: 0 auto;
+        text-align: center;
     }
 
     ul#menu > li > a {
         font-size: 2em;
     }
 
+}
+
+@media only screen and (max-width: 700px) {
+    ul#menu {
+        width: 80%;
+    }
 }
