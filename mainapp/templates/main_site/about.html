@@ -19,7 +19,7 @@
         </ul>
     <div class="main_wrapper">
         <div class="push"></div>
-        <img id="main_image" alt="fox image" src={% static "mainapp/images/hound.svg" %} />
+        <img id="main_image" alt="fox image" src={% static "mainapp/images/hound.svg" %} onerror="this.src={% static "mainapp/images/hound.png" %}"  />
         <div id="about_text">
             <h3>Who am I</h3>
                 <p>
