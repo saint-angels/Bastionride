@@ -19,8 +19,33 @@
     </ul>
     <div class="main_wrapper">
         <div class="push"></div>
-        <img id="main_image" alt="artbook image" src={% static "mainapp/images/gallery_.jpg" %} />
-        <div id="about_text">Something cool is going to be here</div>
+
+
+
+{#        <img id="main_image" alt="artbook image" src={% static "mainapp/images/gallery_.jpg" %} />#}
+{#        <div id="about_text">Something cool is going to be here</div>#}
+        <div class="main_content">
+            <ul id="imageSet">
+                <li>
+                    <a href="{% static "mainapp/images/gallery_1.jpg" %}" class="lightbox_trigger">
+                        <img class="lightbox_preview_img" src="{% static "mainapp/images/gallery_preview_1.gif" %}" alt="First gallery element"/>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% static "mainapp/images/gallery_2.jpg" %}" class="lightbox_trigger">
+                        <img class="lightbox_preview_img" src="{% static "mainapp/images/gallery_preview_2.gif" %}" alt="First gallery element"/>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% static "mainapp/images/gallery_3.jpg" %}" class="lightbox_trigger">
+                        <img class="lightbox_preview_img" src="{% static "mainapp/images/gallery_preview_3.gif" %}" alt="First gallery element"/>
+                    </a>
+                </li>
+            </ul>
+     </div>
+
+
+
         <div class="push"></div>
     </div>
 
@@ -31,5 +56,7 @@
             </div>
     </div>
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src={% static "mainapp/js/lightbox.js" %}></script>
 </body>
 </html>
