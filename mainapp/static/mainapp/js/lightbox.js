@@ -2,23 +2,24 @@ jQuery(document).ready(function() {
 
     var current;
     var img_urls = [];
+    var body = $('body');
+    var lightbox;
 
 	$('.lightbox_trigger').click(function(e) {
 
 		e.preventDefault();
 		//Get clicked link href
-		var image_href = $(this).attr("href");
+        var image_href = this.href;
 
         // determine the index of clicked trigger
         current = $('.lightbox_trigger').index(this);
 
-
-		if ($('#lightbox').length > 0) { // #lightbox exists
+		if (lightbox && lightbox.length > 0) { // #lightbox exists
     	    $('#lightbox_content').html('<img src="' + image_href + '" />');
-			$('#lightbox').fadeIn(300);
+			lightbox.fadeIn(300);
 		}
 		else {
-            var lightbox =
+            var lightboxHtml =
                 '<div id="lightbox">' +
                     '<p>Click to close</p>' +
                     '<div id="lightbox_content">' +
@@ -27,12 +28,13 @@ jQuery(document).ready(function() {
                     '<ul id="help_block"><li>Use arrows to navigate</li><li>Click anywhere to exit gallery</li></ul>' +
                 '</div>';
 
-            $('body').append(lightbox);
+            body.append(lightboxHtml);
 
             $('#imageSet').find('.lightbox_trigger').each(function() {
             var $href = $(this).attr('href');
                 img_urls.push($href);
             });
+            lightbox = $('#lightbox');
 		}
 
 //        $([img_urls[current]]).preload();
@@ -43,7 +45,7 @@ jQuery(document).ready(function() {
     $.fn.closeLightBox = function(e) {
         e.preventDefault();
         e.stopPropagation();
-        $('#lightbox').fadeOut(300);
+        lightbox.fadeOut(300);
     }
 
     $.fn.toggleHelpBlock = function(e) {
@@ -80,7 +82,7 @@ jQuery(document).ready(function() {
         e.preventDefault();
         e.stopPropagation();
         $('#help_block').hide();
-        $('#lightbox_content').html("<img src=\"/static/mainapp/images/ajax-loader.gif\" />");
+        $('#lightbox_content').html('<img src="/static/mainapp/images/ajax-loader.gif" />');
 
         var dest = current != 0 ? current - 1 : img_urls.length - 1;
 
@@ -92,20 +94,19 @@ jQuery(document).ready(function() {
         current = dest;
     }
 
-//    function
 
-    $('body').on('click', '#lightbox', function(e) {
+    body.on('click', '#lightbox', function(e) {
        $.fn.closeLightBox(e);
     });
 
-    $('body').on('keydown',function(e){
+    body.on('keydown',function(e){
       switch (e.which) {
           case 27:
               $.fn.closeLightBox(e);
           break;
-          case 116:
-             e.preventDefault();
-          break;
+//          case 116:
+//             e.preventDefault();
+//          break;
           case 39:
             $.fn.Next(e);
           break;
