@@ -100,7 +100,7 @@ jQuery(document).ready(function() {
     });
 
     body.on('keydown',function(e){
-      e = $.event.fix(e);
+      e = $.event.fix(e); //This should fix prevent default for IE
       switch (e.which) {
           case 27:
               $.fn.closeLightBox(e);
