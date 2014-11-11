@@ -94,19 +94,31 @@ jQuery(document).ready(function() {
         current = dest;
     }
 
+    $.fn.PreventDefaultAction = function(e) {
+        //e.cancelBubble is supported by IE - this will kill the bubbling process.
+        event.cancelBubble = true;
+        event.returnValue = false;
+
+        //e.stopPropagation works only in Firefox.
+        if (event.stopPropagation) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    }
+
 
     body.on('click', '#lightbox', function(e) {
        $.fn.closeLightBox(e);
     });
 
     body.on('keydown',function(e){
-      e = $.event.fix(e); //This should fix prevent default for IE
+//      e = $.event.fix(e);
       switch (e.which) {
           case 27:
               $.fn.closeLightBox(e);
           break;
           case 116:
-             e.preventDefault();
+             $.fn.PreventDefaultAction(e); //This should fix prevent default for IE
           break;
           case 39:
             $.fn.Next(e);
