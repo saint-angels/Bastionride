@@ -100,6 +100,7 @@ jQuery(document).ready(function() {
     });
 
     body.on('keydown',function(e){
+      e = $.event.fix(e);
       switch (e.which) {
           case 27:
               $.fn.closeLightBox(e);
