@@ -105,9 +105,9 @@ jQuery(document).ready(function() {
           case 27:
               $.fn.closeLightBox(e);
           break;
-//          case 116:
-//             e.preventDefault();
-//          break;
+          case 116:
+             e.preventDefault();
+          break;
           case 39:
             $.fn.Next(e);
           break;
