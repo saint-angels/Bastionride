@@ -49,8 +49,7 @@ jQuery(document).ready(function() {
     }
 
     $.fn.toggleHelpBlock = function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+        $.fn.PreventDefaultAction(e);
         $('#help_block').toggle();
     }
 
@@ -117,9 +116,9 @@ jQuery(document).ready(function() {
           case 27:
               $.fn.closeLightBox(e);
           break;
-          case 116:
-             $.fn.PreventDefaultAction(e); //This should fix prevent default for IE
-          break;
+//          case 116:
+//             $.fn.PreventDefaultAction(e); //This should fix prevent default for IE
+//          break;
           case 39:
             $.fn.Next(e);
           break;
