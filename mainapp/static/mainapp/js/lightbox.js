@@ -49,17 +49,22 @@ jQuery(document).ready(function() {
     }
 
     $.fn.toggleHelpBlock = function(e) {
-        e.preventDefault();
+        pde(e);
         e.stopPropagation();
         $('#help_block').toggle();
+    }
+
+    function pde(e)//Function to prevent Default Events
+    {
+        if(e.preventDefault)
+            e.preventDefault();
+        else
+            e.returnValue = false;
     }
 
     $.fn.Next= function(e) {
         e.preventDefault();
         e.stopPropagation();
-
-        if ("onhelp" in window) // F1 in IE
-            {window.onhelp = function () {return false;}}
 
         $('#help_block').hide();
 
