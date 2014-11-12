@@ -57,6 +57,10 @@ jQuery(document).ready(function() {
     $.fn.Next= function(e) {
         e.preventDefault();
         e.stopPropagation();
+
+        if ("onhelp" in window) // F1 in IE
+            {window.onhelp = function () {return false;}}
+
         $('#help_block').hide();
 
         $('#lightbox_content').html("<img src=\"/static/mainapp/images/ajax-loader.gif\" />");
