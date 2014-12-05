@@ -7,6 +7,12 @@
     text-align: center;
 }
 
+a {
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: none;
+}
+
 #footer > ul {
     list-style: none;
 }
@@ -37,7 +43,7 @@
 }
 
 #footer_text {
-    width: 90%;
+    width: 70%;
     margin: 0 auto;
     text-align: center;
 }
@@ -67,6 +73,13 @@
   visibility: visible;
   -webkit-transform: scaleX(1);
   transform: scaleX(1);
+}
+
+#hitcount_image {
+    float: right;
+        bottom: 50px;
+    right: 0;
+
 }
 
 @media only screen and (max-device-width: 480px){

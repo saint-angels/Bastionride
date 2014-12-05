@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/header.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/feedback.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/footer.css" %}>
+    <style type="text/css">
+        html {font-family: "Raleway", sans-serif;}
+    </style>
+    <meta charset="UTF-8">
+    <title>About</title>
+</head>
+<body>
+        <ul id="menu">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'gallery' %}">Gallery</a></li>
+            <li><a id ="current_menu_tab" href="{% url 'feedback' %}">Feedback</a></li>
+
+        </ul>
+    <div class="main_wrapper">
+        <div class="push"></div>
+
+        <div id="about_text">
+        <h3>Leave some feedback!</h3>
+            <form id="feedback_form" action="{% url "feedback" %}" method="post" style="width: 200px;">
+                {% csrf_token %}
+                <p>{{ form.non_field_errors }}</p>
+               <p>{{ form.user_feedback }}</p>
+                <p><input type="submit" value="Submit" /></p>
+            </form>
+
+        <p id="previous_feedback">
+        <h3>User-generated feedback</h3>
+            {% if feedback_messages %}
+                {% for feedback_message in feedback_messages %}
+                    <p>{% autoescape off %}{{ feedback_message.text }}{% endautoescape %}</p>
+
+                {% endfor %}
+           {% else %}
+                <p>No one left any feedback here. Be the first!</p>
+            {% endif %}
+            </p>
+
+
+
+        </div>
+        <div class="push"></div>
+    </div>
+
+    <div id="footer">
+        <div id="footer_border"></div>
+        <div id="footer_text">
+            By visiting this site, you're accepting <a href="https://en.wikipedia.org/wiki/Declaration_of_Arbroath">declaration of Scottish independence</a>
+        </div>
+        <img id="hitcount_image" alt="hitcount info" src={% url 'hitcount_image' %} />
+    </div>
+
+</body>
+</html>
