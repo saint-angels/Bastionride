@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <title>About</title>
 </head>
-<body>
+<body onload="getWindowSize()">
         <ul id="menu">
             <li><a href="{% url 'index' %}">Home</a></li>
             <li><a id ="current_menu_tab" href="{% url 'about' %}">About</a></li>
@@ -36,6 +36,7 @@
             <h3>Dynamic of visits for my site</h3>
                 <p>
                     <img id="hitcount_image" alt="hitcount info" src={% url 'hitcount_image' %} />
+                    <p>Your screen size is: <div id="screen_size"> Unknown</div> </p>
                 </p>
         </div>
         <div class="push"></div>
@@ -47,6 +48,11 @@
             By visiting this site, you're accepting <a href="https://en.wikipedia.org/wiki/Declaration_of_Arbroath">declaration of Scottish independence</a>
         </div>
     </div>
+<script>
+    function getWindowSize() {
+        document.getElementById("screen_size").innerHTML = window.screen.width+"x"+window.screen.height;
+    }
+</script>
 
 </body>
 </html>

@@ -2,9 +2,11 @@ from django.db import models
 
 
 class Hits(models.Model):
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField()
     ip = models.CharField(max_length=30)
     user_agent = models.TextField()
+    os = models.CharField(max_length=40, default='Unknown')
+    browser = models.CharField(max_length=40, default='Unknown')
 
     def __unicode__(self):
         return str(self.time) + " " + self.ip + self.user_agent

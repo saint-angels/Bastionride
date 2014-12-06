@@ -8,6 +8,7 @@ from datetime import timedelta
 from PIL import Image, ImageDraw
 from datetime import datetime
 import sys
+import httpagentparser
 
 
 def index(request):
@@ -47,7 +48,7 @@ def feedback(request):
 
 
 def hitcount_image(request):
-    size = (200, 50)
+    size = (250, 50)
     im = Image.new('RGB', size, (25, 25, 25))
     draw = ImageDraw.Draw(im)   # create a drawing object that is
                                 # used to draw on the new image
@@ -56,17 +57,21 @@ def hitcount_image(request):
     a_day_ago = django.utils.timezone.now() - timedelta(days=1)
     today_hits_count = str(Hits.objects.filter(time__gt=a_day_ago).count())
 
+
     address = request.META['REMOTE_ADDR']
     user_agent = request.META['HTTP_USER_AGENT']
     lastVisit = Hits.objects.filter(ip=address, user_agent=user_agent).latest()
 
+    (os, browser) = httpagentparser.simple_detect(user_agent)
+
     lines_to_render = ["All: " + all_hits_count,
                        "Today: " + today_hits_count,
-                       "Last visit: " + formats.date_format(lastVisit.time, "SHORT_DATETIME_FORMAT")]
+                       "Your last visit: " + formats.date_format(lastVisit.time, "SHORT_DATETIME_FORMAT"),
+                       "Your browser: " + browser]
     white_color = (255, 255, 255)
-    for lineIdx in range(0, 3):
+    for lineIdx in range(0, len(lines_to_render)):
         text_pos = (0, 12 * lineIdx)
-        draw.text(text_pos, lines_to_render[lineIdx], white_color )
+        draw.text(text_pos, lines_to_render[lineIdx], white_color)
     del draw
 
     response = HttpResponse(content_type="image/png")
