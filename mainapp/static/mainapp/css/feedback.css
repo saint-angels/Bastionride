@@ -8,17 +8,17 @@ html, body {
     width: 90%;
     min-height: 100%;
     margin: -50px auto -50px;
-    border: 1px solid white;
+    /*border: 1px solid white;*/
 }
 
 #about_text {
     width: 50%;
     margin: 0 auto;
     font-size: 1em;
-    border: 1px solid white;
+    /*border: 1px solid white;*/
 }
 
-h3 {
+h2 {
     font-weight: 400;
     margin: 0 auto;
     padding-top: 30px;
@@ -33,11 +33,27 @@ h3 {
     float: none;
 }
 
-input[type=text] {
+#feedback_form *{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#feedback_text_field textarea {
     /*margin: -50px 0 0;*/
-    border: 1px solid white;
+    /*border: 10px solid red;*/
     width: 200px;
     height: 100px;
+    clear: both;
+    resize: none;
+
+}
+
+#captcha img, input{
+    float: right;
+}
+
+#captcha input {
+    margin-right: 0;
 }
 
 input[type=submit] {
@@ -45,11 +61,12 @@ input[type=submit] {
     border-style: none;
     background-color: white;
 
-    float: right; position: relative;
+    /*float: right; position: relative;*/
+    clear: both;
 }
 
 #previous_feedback {
-    padding-top: 50px;
+    padding-top: 100px;
 }
 
 

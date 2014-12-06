@@ -50,6 +50,7 @@ a {
 
 #footer_text > a {
     position: relative;
+    margin: 0 auto;
 }
 
 #footer_text > a:before {
@@ -75,12 +76,15 @@ a {
   transform: scaleX(1);
 }
 
-#hitcount_image {
-    float: right;
-        bottom: 50px;
-    right: 0;
+/*#hitcount_image {*/
+    /*float: right;*/
+        /*bottom: 50px;*/
+    /*right: 0;*/
+    /*margin-top: -10px;*/
+    /*margin-right: -200px;*/
+    /*border: 1px solid white;*/
 
-}
+/*}*/
 
 @media only screen and (max-device-width: 480px){
     #footer_text {

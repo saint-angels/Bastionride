@@ -6,7 +6,6 @@ import django.utils
 from django.utils import formats
 from datetime import timedelta
 from PIL import Image, ImageDraw
-import textwrap
 from datetime import datetime
 import sys
 
