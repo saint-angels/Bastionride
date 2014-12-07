@@ -1,4 +1,5 @@
 {% load static %}
+{% load tz %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -31,18 +32,18 @@
                 <p id="captcha">{{ form.captcha }}</p>
                 <p><input type="submit" value="Submit" /></p>
             </form>
-
-        <p id="previous_feedback">
+        <p>
+        <div id="previous_feedback">
         <h2>User-generated feedback</h2>
             {% if feedback_messages %}
                 {% for feedback_message in feedback_messages %}
-                    <p>{% autoescape off %}{{ feedback_message.text }}{% endautoescape %} (Written on {{ feedback_message.time | date:"d M, Y" }})</p>
+                    <p>{% autoescape off %}{{ feedback_message.text }}{% endautoescape %}
+                        (Written on {% localtime on %} {{ feedback_message.time | date:"d M, H:i" }}{% endlocaltime %})</p>
 
                 {% endfor %}
            {% else %}
-                <p>No one left any feedback here. Be the first!</p>
+                <p>No one left any feedback here. Be the first!
             {% endif %}
-            </p>
 
 
 

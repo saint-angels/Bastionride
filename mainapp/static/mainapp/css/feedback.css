@@ -69,6 +69,11 @@ input[type=submit] {
     padding-top: 100px;
 }
 
+#previous_feedback img {
+    max-width: 100px;
+    height: auto !important;
+}
+
 
 .push {
     height: 50px;

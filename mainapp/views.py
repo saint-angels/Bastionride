@@ -6,9 +6,11 @@ import django.utils
 from django.utils import formats
 from datetime import timedelta
 from PIL import Image, ImageDraw
-from datetime import datetime
 import sys
 import httpagentparser
+from BeautifulSoup import BeautifulSoup
+from django.utils import timezone
+import xssescape
 
 
 def index(request):
@@ -28,22 +30,21 @@ def feedback(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = FeedbackForm(request.POST)
-        # check whether it's valid:
         if form.is_valid():
-            print >> sys.stderr, "FORM" + keeptags(form.cleaned_data['user_feedback'], 'B I IMG b i img')
-            feedbackText = keeptags(form.cleaned_data['user_feedback'], 'B I IMG b i img')
-            newFeedback = FeedbackMessages(time=django.utils.timezone.now(), text=feedbackText)
-            newFeedback.save()
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
+            # print >> sys.stderr, "FORM" + keeptags(form.cleaned_data['user_feedback'], 'B I IMG b i img')
+            # feedback_html = keeptags(form.cleaned_data['user_feedback'], 'B I IMG b i img')
+            feedback_html = BeautifulSoup(form.cleaned_data['user_feedback']).prettify()
+            x = xssescape.XssCleaner()
+            clear_html = x.strip(feedback_html);
+            new_feedback = FeedbackMessages(time=timezone.localtime(timezone.now()), text=clear_html)
+            new_feedback.save()
             return HttpResponseRedirect('/feedback/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = FeedbackForm()
 
-    feedback_messages = FeedbackMessages.objects.all()
+    feedback_messages = FeedbackMessages.objects.all().order_by('-time')
     return render(request, 'main_site/feedback.html', {'form': form, 'feedback_messages': feedback_messages})
 
 
@@ -66,7 +67,7 @@ def hitcount_image(request):
 
     lines_to_render = ["All: " + all_hits_count,
                        "Today: " + today_hits_count,
-                       "Your last visit: " + formats.date_format(lastVisit.time, "SHORT_DATETIME_FORMAT"),
+                       "Your last visit: " + formats.date_format(timezone.localtime(lastVisit.time), "SHORT_DATETIME_FORMAT"),
                        "Your browser: " + browser]
     white_color = (255, 255, 255)
     for lineIdx in range(0, len(lines_to_render)):
@@ -97,7 +98,6 @@ def keeptags(value, tags):
     value = starttag_re.sub('##~~~\g<1>\g<3>~~~##', value)
     value = endtag_re.sub('##~~~\g<1>~~~##', value)
     value = strip_tags(value)
-    value = escape(value)
     recreate_re = re.compile('##~~~([^~]+)~~~##')
     value = recreate_re.sub('<\g<1>>', value)
     return value
