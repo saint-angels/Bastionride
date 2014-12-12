@@ -12,6 +12,9 @@ urlpatterns = patterns('mainapp.views',
     url(r'^polls/$', 'polls', name='polls'),
     url(r'^polls/vote/(?P<question_id>[0-9]+)$', 'vote', name='vote'),
     url(r'^polls/question_info_image/(?P<question_id>[0-9]+)$', 'question_info_image', name='question_info_image'),
+    url(r'^polls/question_info_image_b64/(?P<question_id>[0-9]+)$',
+        'question_info_image_b64',
+        name='question_info_image_b64'),
 )
 
 

@@ -46,13 +46,13 @@ jQuery(document).ready(function() {
         e.preventDefault();
         e.stopPropagation();
         lightbox.fadeOut(300);
-    }
+    };
 
     $.fn.toggleHelpBlock = function(e) {
         pde(e);
         e.stopPropagation();
         $('#help_block').toggle();
-    }
+    };
 
     function pde(e)//Function to prevent Default Events
     {

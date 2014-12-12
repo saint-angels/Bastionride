@@ -11,6 +11,11 @@ import httpagentparser
 from BeautifulSoup import BeautifulSoup
 import xssescape
 import sys
+import json
+import base64
+import cStringIO
+from captcha.models import CaptchaStore
+from captcha.helpers import captcha_image_url
 
 
 def index(request):
@@ -34,8 +39,31 @@ def polls(request):
     return render(request, 'main_site/polls.html', {'question_forms': question_forms})
 
 
+# def vote(request, question_id):
+#
+#     if request.method == 'POST':
+#         form = RadioVoteForm(request.POST)
+#         if form.is_valid():
+#             p = get_object_or_404(Question, pk=question_id)
+#             try:
+#                 selected_choice = p.choice_set.get(pk=request.POST['choice'])
+#             except (KeyError, Choice.DoesNotExist):
+#                 # print >>sys.stderr, 'VOTE FORM ERROR: ' + request.POST['choice']
+#                 return render(request, 'main_site/polls.html', {
+#                     'questions': Question.objects.order_by('-pub_date'),
+#                     'error_message': "You didn't select a choice.",
+#                 })
+#             else:
+#                 selected_choice.votes += 1
+#                 selected_choice.save()
+#         else:
+#             print >>sys.stderr, 'VOTE FORM ERROR: ' + str(form.errors)
+#
+#     # This prevents data from being posted twice if user hits the Back button
+#     return HttpResponseRedirect(reverse('polls'))
 def vote(request, question_id):
 
+    response_json = {}
     if request.method == 'POST':
         form = RadioVoteForm(request.POST)
         if form.is_valid():
@@ -43,19 +71,22 @@ def vote(request, question_id):
             try:
                 selected_choice = p.choice_set.get(pk=request.POST['choice'])
             except (KeyError, Choice.DoesNotExist):
-                # print >>sys.stderr, 'VOTE FORM ERROR: ' + request.POST['choice']
-                return render(request, 'main_site/polls.html', {
-                    'questions': Question.objects.order_by('-pub_date'),
-                    'error_message': "You didn't select a choice.",
-                })
+                response_json['error'] = "You didn't select a choice."
             else:
                 selected_choice.votes += 1
                 selected_choice.save()
+                response_json['status'] = 1
+                response_json['new_cptch_key'] = CaptchaStore.generate_key()
+                response_json['new_cptch_image'] = captcha_image_url(response_json['new_cptch_key'])
         else:
+            response_json['status'] = 0
+            response_json['form_errors'] = form.errors
+            response_json['new_cptch_key'] = CaptchaStore.generate_key()
+            response_json['new_cptch_image'] = captcha_image_url(response_json['new_cptch_key'])
             print >>sys.stderr, 'VOTE FORM ERROR: ' + str(form.errors)
-
-    # This prevents data from being posted twice if user hits the Back button
-    return HttpResponseRedirect(reverse('polls'))
+    else:
+        response_json['error'] = "Method is not POST"
+    return HttpResponse(json.dumps(response_json), content_type="application/json")
 
 
 def question_info_image(request, question_id):
@@ -73,6 +104,25 @@ def question_info_image(request, question_id):
     response = HttpResponse(content_type="image/png")
     im.save(response, 'PNG')
     return response
+
+
+def question_info_image_b64(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    lines_to_render = []
+    for choice in question.choice_set.all():
+        lines_to_render.append(choice.choice_text + ": " + str(choice.votes))
+    size = (200, len(lines_to_render) * 15)
+    im = Image.new('RGB', size, (25, 25, 25))
+    draw = ImageDraw.Draw(im)
+    for lineIdx in range(0, len(lines_to_render)):
+        text_pos = (0, 12 * lineIdx)
+        draw.text(text_pos, lines_to_render[lineIdx], (255, 255, 255))
+    del draw
+
+    jpeg_image_buffer = cStringIO.StringIO()
+    im.save(jpeg_image_buffer, format="PNG")
+    imgStr = base64.b64encode(jpeg_image_buffer.getvalue())
+    return HttpResponse(imgStr)
 
 
 def feedback(request):

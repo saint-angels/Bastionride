@@ -1,5 +1,4 @@
 {% load static %}
-{% load tz %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -25,33 +24,18 @@
         <div class="push"></div>
 
         <div id="about_text">
-
-{#         {% if questions %}#}
-{#            <ul>#}
-{#            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}#}
-{#            {% for question in questions %}#}
-{#               <h3 class="question_title"> {{ question.question_text }} </h3>#}
-{#                <img id="poll_info_img" alt="poll info" src={% url 'question_info_image' question.id %} />#}
-{#                <form action="{% url 'vote' question.id %}" method="POST">#}
-{#                    {% csrf_token %}#}
-{#                    {% for choice in question.choice_set.all %}#}
-{#                        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />#}
-{#                        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />#}
-{#                    {% endfor %}#}
-{#                    <input type="submit" value="Vote" />#}
-{#                </form>#}
-{#            {% endfor %}#}
-{#                </ul>#}
-{#        {% else %}#}
-{#            <p>No polls are available.</p>#}
-{#        {% endif %}#}
-
             {% if question_forms %}
             <ul>
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
             {% for question_form in question_forms %}
                <h3 class="question_title"> {{ question_form.instance.question_text }} </h3>
-                <img id="poll_info_img" alt="poll info" src={% url 'question_info_image' question_form.instance.id %} />
+
+                {% with img_id=question_form.instance.id|stringformat:"s" %}
+                {% with tag_id="question_info_image_"|add:img_id %}
+                    <img id={{ tag_id }} src={% url 'question_info_image' question_form.instance.id %} alt="poll info" />
+                {% endwith %}
+                {% endwith %}
+
                 <form action="{% url 'vote' question_form.instance.id %}" method="POST">
                     {% csrf_token %}
                     {% if question_form.instance.selection_type == 'radio' %}
