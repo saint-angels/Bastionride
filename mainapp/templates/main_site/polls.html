@@ -1,0 +1,93 @@
+{% load static %}
+{% load tz %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <link rel="shortcut icon" type="image/x-icon" href={% static "mainapp/images/favicon.png" %} />
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/header.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/polls.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/footer.css" %}>
+    <style type="text/css">
+        html {font-family: "Raleway", sans-serif;}
+    </style>
+    <meta charset="UTF-8">
+    <title>Polls</title>
+</head>
+<body>
+        <ul id="menu">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'gallery' %}">Gallery</a></li>
+            <li><a id ="current_menu_tab" href="{% url 'polls' %}">Polls</a></li>
+            <li><a href="{% url 'feedback' %}">Feedback</a></li>
+        </ul>
+    <div class="main_wrapper">
+        <div class="push"></div>
+
+        <div id="about_text">
+
+{#         {% if questions %}#}
+{#            <ul>#}
+{#            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}#}
+{#            {% for question in questions %}#}
+{#               <h3 class="question_title"> {{ question.question_text }} </h3>#}
+{#                <img id="poll_info_img" alt="poll info" src={% url 'question_info_image' question.id %} />#}
+{#                <form action="{% url 'vote' question.id %}" method="POST">#}
+{#                    {% csrf_token %}#}
+{#                    {% for choice in question.choice_set.all %}#}
+{#                        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />#}
+{#                        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />#}
+{#                    {% endfor %}#}
+{#                    <input type="submit" value="Vote" />#}
+{#                </form>#}
+{#            {% endfor %}#}
+{#                </ul>#}
+{#        {% else %}#}
+{#            <p>No polls are available.</p>#}
+{#        {% endif %}#}
+
+            {% if question_forms %}
+            <ul>
+            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            {% for question_form in question_forms %}
+               <h3 class="question_title"> {{ question_form.instance.question_text }} </h3>
+                <img id="poll_info_img" alt="poll info" src={% url 'question_info_image' question_form.instance.id %} />
+                <form action="{% url 'vote' question_form.instance.id %}" method="POST">
+                    {% csrf_token %}
+                    {% if question_form.instance.selection_type == 'radio' %}
+                        {% for choice in question_form.instance.choice_set.all %}
+                            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+                            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
+                        {% endfor %}
+                    {% elif question_form.instance.selection_type == 'dropdown' %}
+                        <label for="choice_list">Select your choice!</label><select name="choice" id="choice_list">
+                            {% for choice in question_form.instance.choice_set.all %}
+                                <option name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">{{ choice.choice_text }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
+                    <p id="captcha">{{ question_form.captcha }}</p>
+                    <input type="submit" value="Vote" />
+                </form>
+            {% endfor %}
+                </ul>
+        {% else %}
+            <p>No polls are available.</p>
+        {% endif %}
+
+
+        </div>
+        <div class="push"></div>
+    </div>
+
+    <div id="footer">
+        <div id="footer_border"></div>
+        <div id="footer_text">
+            By visiting this site, you're accepting <a href="https://en.wikipedia.org/wiki/Declaration_of_Arbroath">declaration of Scottish independence</a>
+        </div>
+    </div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src={% static "mainapp/js/polls.js" %}></script>
+</body>
+</html>

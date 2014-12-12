@@ -1,16 +1,16 @@
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
-from mainapp.forms import FeedbackForm
-from mainapp.models import FeedbackMessages, Hits
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, get_object_or_404
+from mainapp.forms import FeedbackForm, RadioVoteForm
+from mainapp.models import FeedbackMessages, Hits, Question, Choice
 import django.utils
-from django.utils import formats
+from django.utils import formats, timezone
 from datetime import timedelta
 from PIL import Image, ImageDraw
-import sys
 import httpagentparser
 from BeautifulSoup import BeautifulSoup
-from django.utils import timezone
 import xssescape
+import sys
 
 
 def index(request):
@@ -25,17 +25,65 @@ def gallery(request):
     return render(request, 'main_site/gallery.html', {})
 
 
+def polls(request):
+    question_list = Question.objects.order_by('-pub_date')
+    question_forms = []
+    for question in question_list:
+        question_forms.append(RadioVoteForm(instance=question))
+
+    return render(request, 'main_site/polls.html', {'question_forms': question_forms})
+
+
+def vote(request, question_id):
+
+    if request.method == 'POST':
+        form = RadioVoteForm(request.POST)
+        if form.is_valid():
+            p = get_object_or_404(Question, pk=question_id)
+            try:
+                selected_choice = p.choice_set.get(pk=request.POST['choice'])
+            except (KeyError, Choice.DoesNotExist):
+                # print >>sys.stderr, 'VOTE FORM ERROR: ' + request.POST['choice']
+                return render(request, 'main_site/polls.html', {
+                    'questions': Question.objects.order_by('-pub_date'),
+                    'error_message': "You didn't select a choice.",
+                })
+            else:
+                selected_choice.votes += 1
+                selected_choice.save()
+        else:
+            print >>sys.stderr, 'VOTE FORM ERROR: ' + str(form.errors)
+
+    # This prevents data from being posted twice if user hits the Back button
+    return HttpResponseRedirect(reverse('polls'))
+
+
+def question_info_image(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    lines_to_render = []
+    for choice in question.choice_set.all():
+        lines_to_render.append(choice.choice_text + ": " + str(choice.votes))
+    size = (200, len(lines_to_render) * 15)
+    im = Image.new('RGB', size, (25, 25, 25))
+    draw = ImageDraw.Draw(im)
+    for lineIdx in range(0, len(lines_to_render)):
+        text_pos = (0, 12 * lineIdx)
+        draw.text(text_pos, lines_to_render[lineIdx], (255, 255, 255))
+    del draw
+    response = HttpResponse(content_type="image/png")
+    im.save(response, 'PNG')
+    return response
+
+
 def feedback(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = FeedbackForm(request.POST)
         if form.is_valid():
-            # print >> sys.stderr, "FORM" + keeptags(form.cleaned_data['user_feedback'], 'B I IMG b i img')
-            # feedback_html = keeptags(form.cleaned_data['user_feedback'], 'B I IMG b i img')
             feedback_html = BeautifulSoup(form.cleaned_data['user_feedback']).prettify()
             x = xssescape.XssCleaner()
-            clear_html = x.strip(feedback_html);
+            clear_html = x.strip(feedback_html)
             new_feedback = FeedbackMessages(time=timezone.localtime(timezone.now()), text=clear_html)
             new_feedback.save()
             return HttpResponseRedirect('/feedback/')
@@ -58,16 +106,15 @@ def hitcount_image(request):
     a_day_ago = django.utils.timezone.now() - timedelta(days=1)
     today_hits_count = str(Hits.objects.filter(time__gt=a_day_ago).count())
 
-
     address = request.META['REMOTE_ADDR']
     user_agent = request.META['HTTP_USER_AGENT']
-    lastVisit = Hits.objects.filter(ip=address, user_agent=user_agent).latest()
+    last_visit = Hits.objects.filter(ip=address, user_agent=user_agent).latest()
 
     (os, browser) = httpagentparser.simple_detect(user_agent)
 
     lines_to_render = ["All: " + all_hits_count,
                        "Today: " + today_hits_count,
-                       "Your last visit: " + formats.date_format(timezone.localtime(lastVisit.time), "SHORT_DATETIME_FORMAT"),
+                       "Your last visit: " + formats.date_format(timezone.localtime(last_visit.time), "SHORT_DATETIME_FORMAT"),
                        "Your browser: " + browser]
     white_color = (255, 255, 255)
     for lineIdx in range(0, len(lines_to_render)):
@@ -78,26 +125,3 @@ def hitcount_image(request):
     response = HttpResponse(content_type="image/png")
     im.save(response, 'PNG')
     return response
-
-
-def keeptags(value, tags):
-    """
-    Strips all [X]HTML tags except the space seperated list of tags
-    from the output.
-
-    Usage: keeptags:"strong em ul li"
-    """
-    import re
-    from django.utils.html import strip_tags, escape
-    tags = [re.escape(tag) for tag in tags.split()]
-    tags_re = '(%s)' % '|'.join(tags)
-    singletag_re = re.compile(r'<(%s\s*/?)>' % tags_re)
-    starttag_re = re.compile(r'<(%s)(\s+[^>]+)>' % tags_re)
-    endtag_re = re.compile(r'<(/%s)>' % tags_re)
-    value = singletag_re.sub('##~~~\g<1>~~~##', value)
-    value = starttag_re.sub('##~~~\g<1>\g<3>~~~##', value)
-    value = endtag_re.sub('##~~~\g<1>~~~##', value)
-    value = strip_tags(value)
-    recreate_re = re.compile('##~~~([^~]+)~~~##')
-    value = recreate_re.sub('<\g<1>>', value)
-    return value

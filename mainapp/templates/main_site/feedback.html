@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <link rel="shortcut icon" href={% static "mainapp/images/favicon.png" %} type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href={% static "mainapp/images/favicon.png" %} />
     <link rel="stylesheet" type="text/css" href={% static "mainapp/css/header.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "mainapp/css/feedback.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "mainapp/css/footer.css" %}>
@@ -11,13 +11,14 @@
         html {font-family: "Raleway", sans-serif;}
     </style>
     <meta charset="UTF-8">
-    <title>About</title>
+    <title>Feedback</title>
 </head>
 <body>
         <ul id="menu">
             <li><a href="{% url 'index' %}">Home</a></li>
             <li><a href="{% url 'about' %}">About</a></li>
             <li><a href="{% url 'gallery' %}">Gallery</a></li>
+            <li><a href="{% url 'polls' %}">Polls</a></li>
             <li><a id ="current_menu_tab" href="{% url 'feedback' %}">Feedback</a></li>
 
         </ul>
