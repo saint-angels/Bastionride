@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <link rel="shortcut icon" href={% static "mainapp/images/favicon.png" %} type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/header.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/about.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/footer.css" %}>
+    <style type="text/css">
+        html {font-family: "Raleway", sans-serif;}
+    </style>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body onload="getWindowSize()">
+        <ul id="menu">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'gallery' %}">Gallery</a></li>
+            <li><a href="{% url 'polls' %}">Polls</a></li>
+            <li><a href="{% url 'feedback' %}">Feedback</a></li>
+        </ul>
+    <div class="main_wrapper">
+        <div class="push"></div>
+        <!--[if lte IE 8]><img id="main_image" alt="fox image" src={% static "mainapp/images/hound.png" %} /><![endif]-->
+        <!--[if !IE]> --><img id="main_image" alt="fox image" src={% static "mainapp/images/hound.svg" %} /><!-- <![endif]-->
+        <div id="about_text">
+
+         <h1>Registeration</h1>
+
+        {% if registered %}
+            <strong>Thank you for registering! Now you can login and edit your feedback messages!</strong>
+        {% else %}
+        <strong>Register, now!</strong><br />
+
+        <form id="user_form" method="post" action="/register/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {{ user_form.as_p }}
+
+            <input type="submit" name="submit" value="Register" />
+        </form>
+        {% endif %}
+
+        </div>
+        <div class="push"></div>
+    </div>
+
+    <div id="footer">
+        <div id="footer_border"></div>
+        <div id="footer_text">
+            By visiting this site, you're accepting <a href="https://en.wikipedia.org/wiki/Declaration_of_Arbroath">declaration of Scottish independence</a>
+        </div>
+    </div>
+<script>
+    function getWindowSize() {
+        document.getElementById("screen_size").innerHTML = window.screen.width+"x"+window.screen.height;
+    }
+</script>
+
+</body>
+</html>

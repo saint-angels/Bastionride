@@ -21,6 +21,16 @@
             <li><a href="{% url 'polls' %}">Polls</a></li>
             <li><a id ="current_menu_tab" href="{% url 'feedback' %}">Feedback</a></li>
 
+            <div id="login_block">
+            {% if user.is_authenticated %}
+            <h3>{{ user.username }} is logged in!</h3>
+              <li><a href="/feedback_versions/">View feedback versions</a> </li>
+            <li> <a href="/logout/">Logout</a> </li>
+            {% else %}
+                <li> <a href="/register/">Register</a> </li>
+                <li> <a href="/login/">Login</a> </li>
+            {% endif %}
+            </div>
         </ul>
     <div class="main_wrapper">
         <div class="push"></div>
@@ -37,11 +47,20 @@
         <p>
         <div id="previous_feedback">
         <h2>User-generated feedback</h2>
+        <p>
             {% if feedback_messages %}
                 {% for feedback_message in feedback_messages %}
-                    <p>{% autoescape off %}{{ feedback_message.text }}{% endautoescape %}
-                        (Written on {% localtime on %} {{ feedback_message.time | date:"d M, H:i" }}{% endlocaltime %})</p>
-
+                    <p>
+                    {% autoescape off %}{{ feedback_message.text }}{% endautoescape %}
+                        (Written on {% localtime on %} {{ feedback_message.time | date:"d M, H:i" }}{% endlocaltime %})
+                        {% if user.is_authenticated and feedback_message.user.id == user_id %}
+                            <p><h4 class="feedback_edit" href="#">Enter text here to edit your feedback!</h4>
+                            <form class="feedback_edit_form" action="{% url "edit_feedback" feedback_message.id %}" method="post" style="width: 200px;">
+                            {% csrf_token %}
+                                {{ feedback_edit_form.user_feedback }} <input type="submit" value="Submit" />
+                            </form>
+                        {% endif %}
+                    <br>
                 {% endfor %}
            {% else %}
                 <p>No one left any feedback here. Be the first!

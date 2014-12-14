@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <link rel="shortcut icon" href={% static "mainapp/images/favicon.png" %} type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/header.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/about.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/footer.css" %}>
+    <style type="text/css">
+        html {font-family: "Raleway", sans-serif;}
+    </style>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body onload="getWindowSize()">
+        <ul id="menu">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'gallery' %}">Gallery</a></li>
+            <li><a href="{% url 'polls' %}">Polls</a></li>
+            <li><a href="{% url 'feedback' %}">Feedback</a></li>
+        </ul>
+    <div class="main_wrapper">
+        <div class="push"></div>
+        <!--[if lte IE 8]><img id="main_image" alt="fox image" src={% static "mainapp/images/hound.png" %} /><![endif]-->
+        <!--[if !IE]> --><img id="main_image" alt="fox image" src={% static "mainapp/images/hound.svg" %} /><!-- <![endif]-->
+        <div id="about_text">
+
+         <h1>Login</h1>
+
+        <form id="login_form" method="post" action="/login/">
+            {% csrf_token %}
+            Username: <input type="text" name="username" value="" size="50" />
+            <br />
+            Password: <input type="password" name="password" value="" size="50" />
+            <br />
+
+            <input type="submit" value="submit" />
+        </form>
+
+
+        </div>
+        <div class="push"></div>
+    </div>
+
+    <div id="footer">
+        <div id="footer_border"></div>
+        <div id="footer_text">
+            By visiting this site, you're accepting <a href="https://en.wikipedia.org/wiki/Declaration_of_Arbroath">declaration of Scottish independence</a>
+        </div>
+    </div>
+<script>
+    function getWindowSize() {
+        document.getElementById("screen_size").innerHTML = window.screen.width+"x"+window.screen.height;
+    }
+</script>
+
+</body>
+</html>

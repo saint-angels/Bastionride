@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Hits(models.Model):
@@ -18,9 +19,12 @@ class Hits(models.Model):
 class FeedbackMessages(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
+    previous_version = models.ForeignKey("self", default=None, null=True)
+    user = models.ForeignKey(User, default=None, null=True)
 
     def __unicode__(self):
         return self.text
+
 
 
 SELECTION_TYPES = (

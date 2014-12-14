@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404
-from mainapp.forms import FeedbackForm, RadioVoteForm
+from mainapp.forms import FeedbackForm, RadioVoteForm, RegistrationForm, FeedbackEditForm
 from mainapp.models import FeedbackMessages, Hits, Question, Choice
 import django.utils
 from django.utils import formats, timezone
@@ -18,7 +18,51 @@ from captcha.models import CaptchaStore
 from captcha.helpers import captcha_image_url
 import xml.etree.ElementTree as ET
 import xlwt
+from django.template import RequestContext
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                return feedback(request)
+            else:
+                return HttpResponse('Your account is disabled')
+        else:
+            print "Invalid login details: {0}, {1}".format(username, password)
+            return HttpResponse('Invalid login and/or password')
+    else:
+        return render(request, 'main_site/login.html')
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return feedback(request)
+
+
+def register(request):
+    registered = False
+    if request.method == 'POST':
+        user_form = RegistrationForm(data=request.POST)
+
+        if user_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+            registered = True
+        else:
+            print user_form.errors
+    else:
+        user_form = RegistrationForm()
+    return render(request, 'main_site/register.html', {'user_form': user_form, 'registered': registered})
 
 
 def index(request):
@@ -151,7 +195,7 @@ def feedback(request):
             feedback_html = BeautifulSoup(form.cleaned_data['user_feedback']).prettify()
             x = xssescape.XssCleaner()
             clear_html = x.strip(feedback_html)
-            new_feedback = FeedbackMessages(time=timezone.localtime(timezone.now()), text=clear_html)
+            new_feedback = FeedbackMessages(time=timezone.localtime(timezone.now()), text=clear_html, user=request.user)
             new_feedback.save()
             return HttpResponseRedirect('/feedback/')
 
@@ -159,8 +203,43 @@ def feedback(request):
     else:
         form = FeedbackForm()
 
-    feedback_messages = FeedbackMessages.objects.all().order_by('-time')
-    return render(request, 'main_site/feedback.html', {'form': form, 'feedback_messages': feedback_messages})
+    user_id = None
+    if request.user.is_authenticated():
+        user_id = request.user.id
+
+    feedback_messages = FeedbackMessages.objects.filter(feedbackmessages=None).order_by('-time')
+    return render(request, 'main_site/feedback.html', {'feedback_messages': feedback_messages, 'form': form, 'feedback_edit_form': FeedbackEditForm(), 'user_id':user_id})
+
+
+def feedback_versions(request):
+    users = User.objects.all()
+    feedback_versions_dict = {}
+    for user in users:
+        feedback_versions_dict[user.username] = FeedbackMessages.objects.filter(user=user).order_by('-time')
+
+    print feedback_versions_dict
+    return render(request, 'main_site/feedback_versions.html', {'user_feedback': feedback_versions_dict})
+
+
+def edit_feeedback_with_id(request, feedback_id):
+    old_feedback = FeedbackMessages.objects.get(id=feedback_id)
+    if request.user.is_authenticated() and request.user == old_feedback.user:
+        if request.method == 'POST':
+            form = FeedbackEditForm(request.POST)
+            if form.is_valid():
+                feedback_html = BeautifulSoup(form.cleaned_data['user_feedback']).prettify()
+                x = xssescape.XssCleaner()
+                clear_html = x.strip(feedback_html)
+                new_feedback = FeedbackMessages(time=timezone.localtime(timezone.now()), text=clear_html, user=request.user, previous_version=old_feedback)
+                new_feedback.save()
+                return HttpResponseRedirect('/feedback/')
+    user_id = None
+    if request.user.is_authenticated():
+        user_id = request.user.id
+
+    feedback_messages = FeedbackMessages.objects.filter(feedbackmessages=None).order_by('-time')
+    return render(request, 'main_site/feedback.html', {'feedback_messages': feedback_messages, 'form': FeedbackForm(), 'feedback_edit_form': FeedbackEditForm(), 'user_id':user_id})
+
 
 
 def hitcount_image(request):

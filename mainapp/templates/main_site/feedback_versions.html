@@ -1,0 +1,61 @@
+{% load static %}
+{% load tz %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <link rel="shortcut icon" href={% static "mainapp/images/favicon.png" %} type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/header.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/about.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "mainapp/css/footer.css" %}>
+    <style type="text/css">
+        html {font-family: "Raleway", sans-serif;}
+    </style>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body onload="getWindowSize()">
+        <ul id="menu">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'gallery' %}">Gallery</a></li>
+            <li><a href="{% url 'polls' %}">Polls</a></li>
+            <li><a href="{% url 'feedback' %}">Feedback</a></li>
+        </ul>
+    <div class="main_wrapper">
+        <div class="push"></div>
+
+        <div id="about_text">
+
+
+                 {% if user_feedback %}
+                    {% for username, feedback_for_user in user_feedback.items %}
+                        <h3>{{ username }}</h3>
+                        <ul>
+                        {% for feedback_msg in feedback_for_user %}
+                            <li>{{ feedback_msg.text }} (Written on {% localtime on %} {{ feedback_msg.time | date:"d M, H:i" }}{% endlocaltime %})</li>
+
+                        {% endfor %}
+                        </ul>
+                    {% endfor %}
+                 {% endif %}
+
+
+
+        </div>
+        <div class="push"></div>
+    </div>
+
+    <div id="footer">
+        <div id="footer_border"></div>
+        <div id="footer_text">
+            By visiting this site, you're accepting <a href="https://en.wikipedia.org/wiki/Declaration_of_Arbroath">declaration of Scottish independence</a>
+        </div>
+    </div>
+<script>
+    function getWindowSize() {
+        document.getElementById("screen_size").innerHTML = window.screen.width+"x"+window.screen.height;
+    }
+</script>
+
+</body>
+</html>
