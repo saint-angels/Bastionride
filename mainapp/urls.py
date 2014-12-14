@@ -15,6 +15,12 @@ urlpatterns = patterns('mainapp.views',
     url(r'^polls/question_info_image_b64/(?P<question_id>[0-9]+)$',
         'question_info_image_b64',
         name='question_info_image_b64'),
+    url(r'^polls/question_info_as_xml/(?P<question_id>[0-9]+)$',
+        'question_info_as_xml',
+        name='question_info_as_xml'),
+    url(r'^polls/question_info_as_xls/(?P<question_id>[0-9]+)$',
+        'question_info_as_xls',
+        name='question_info_as_xls'),
 )
 
 

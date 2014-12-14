@@ -16,6 +16,9 @@ import base64
 import cStringIO
 from captcha.models import CaptchaStore
 from captcha.helpers import captcha_image_url
+import xml.etree.ElementTree as ET
+import xlwt
+
 
 
 def index(request):
@@ -39,28 +42,6 @@ def polls(request):
     return render(request, 'main_site/polls.html', {'question_forms': question_forms})
 
 
-# def vote(request, question_id):
-#
-#     if request.method == 'POST':
-#         form = RadioVoteForm(request.POST)
-#         if form.is_valid():
-#             p = get_object_or_404(Question, pk=question_id)
-#             try:
-#                 selected_choice = p.choice_set.get(pk=request.POST['choice'])
-#             except (KeyError, Choice.DoesNotExist):
-#                 # print >>sys.stderr, 'VOTE FORM ERROR: ' + request.POST['choice']
-#                 return render(request, 'main_site/polls.html', {
-#                     'questions': Question.objects.order_by('-pub_date'),
-#                     'error_message': "You didn't select a choice.",
-#                 })
-#             else:
-#                 selected_choice.votes += 1
-#                 selected_choice.save()
-#         else:
-#             print >>sys.stderr, 'VOTE FORM ERROR: ' + str(form.errors)
-#
-#     # This prevents data from being posted twice if user hits the Back button
-#     return HttpResponseRedirect(reverse('polls'))
 def vote(request, question_id):
 
     response_json = {}
@@ -123,6 +104,42 @@ def question_info_image_b64(request, question_id):
     im.save(jpeg_image_buffer, format="PNG")
     imgStr = base64.b64encode(jpeg_image_buffer.getvalue())
     return HttpResponse(imgStr)
+
+
+def question_info_as_xml(request, question_id):
+    root = ET.Element("question")
+    question = get_object_or_404(Question, pk=question_id)
+    name_tag = ET.SubElement(root, "question_text")
+    name_tag.text = question.question_text
+    choices_tag = ET.SubElement(root, "choices")
+    for choice in question.choice_set.all():
+        choice_tag = ET.SubElement(choices_tag, "choice")
+        choice_text_tag = ET.SubElement(choice_tag, "choice_text")
+        choice_text_tag.text = choice.choice_text
+        votes_tag = ET.SubElement(choice_tag, "votes")
+        votes_tag.text = str(choice.votes)
+    tree = ET.ElementTree(root)
+    return HttpResponse(ET.tostring(tree.getroot(), encoding='utf8', method='xml'), content_type="text/xml")
+
+
+def xls_to_response(xls, fname):
+    response = HttpResponse(content_type="application/ms-excel")
+    response['Content-Disposition'] = 'attachment; filename=%s' % fname
+
+    xls.save(response)
+    return response
+
+
+def question_info_as_xls(request, question_id):
+    workbook = xlwt.Workbook()
+    main_sheet = workbook.add_sheet("main sheet")
+    question = get_object_or_404(Question, pk=question_id)
+    choices = question.choice_set.all()
+    main_sheet.write(0, 0, question.question_text)
+    for choice_idx in range(1, len(choices) + 1):
+        main_sheet.write(choice_idx, 0, choices[choice_idx - 1].choice_text) # row, column, value
+        main_sheet.write(choice_idx, 1, choices[choice_idx - 1].votes)
+    return xls_to_response(workbook, 'question_stat.xls')
 
 
 def feedback(request):

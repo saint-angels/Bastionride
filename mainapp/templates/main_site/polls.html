@@ -35,6 +35,7 @@
                     <img id={{ tag_id }} src={% url 'question_info_image' question_form.instance.id %} alt="poll info" />
                 {% endwith %}
                 {% endwith %}
+                <a href={% url 'question_info_as_xml' question_form.instance.id %}><img src={% static "mainapp/images/xml_icon.png" %} /></a>
 
                 <form action="{% url 'vote' question_form.instance.id %}" method="POST">
                     {% csrf_token %}
