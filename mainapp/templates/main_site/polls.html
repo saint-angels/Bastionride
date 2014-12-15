@@ -43,7 +43,7 @@
                     {% csrf_token %}
                     {% if question_form.instance.selection_type == 'radio' %}
                         {% for choice in question_form.instance.choice_set.all %}
-                            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+                            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" {% if forloop.counter == 1  %} checked="checked" {% endif %} />
                             <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
                         {% endfor %}
                     {% elif question_form.instance.selection_type == 'dropdown' %}
