@@ -217,7 +217,6 @@ def feedback_versions(request):
     for user in users:
         feedback_versions_dict[user.username] = FeedbackMessages.objects.filter(user=user).order_by('-time')
 
-    print feedback_versions_dict
     return render(request, 'main_site/feedback_versions.html', {'user_feedback': feedback_versions_dict})
 
 

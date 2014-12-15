@@ -6,6 +6,13 @@ ul { margin: 0; padding: 0; }
     /*clear:both;*/
 /*}*/
 
+ul#menu  li {
+    display: inline;
+    position: relative;
+}
+
+
+
 ul#menu {
     width: 70%;
     margin: 0 auto;

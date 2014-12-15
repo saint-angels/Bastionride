@@ -29,15 +29,17 @@
             {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
             {% for question_form in question_forms %}
                <h3 class="question_title"> {{ question_form.instance.question_text }} </h3>
+                <br/>
 
                 {% with img_id=question_form.instance.id|stringformat:"s" %}
                 {% with tag_id="question_info_image_"|add:img_id %}
                     <img id={{ tag_id }} src={% url 'question_info_image' question_form.instance.id %} alt="poll info" />
                 {% endwith %}
                 {% endwith %}
-                <a href={% url 'question_info_as_xml' question_form.instance.id %}><img src={% static "mainapp/images/xml_icon.png" %} /></a>
+                <a href={% url 'question_info_as_xml' question_form.instance.id %}><img class="download_icon" src={% static "mainapp/images/xml_icon.png" %} /></a>
+                <a href={% url 'question_info_as_xls' question_form.instance.id %}><img class="download_icon" src={% static "mainapp/images/xls_icon.png" %} /></a>
 
-                <form action="{% url 'vote' question_form.instance.id %}" method="POST">
+                <form class="choice_selection_form" action="{% url 'vote' question_form.instance.id %}" method="POST">
                     {% csrf_token %}
                     {% if question_form.instance.selection_type == 'radio' %}
                         {% for choice in question_form.instance.choice_set.all %}
@@ -54,6 +56,7 @@
                     <p id="captcha">{{ question_form.captcha }}</p>
                     <input type="submit" value="Vote" />
                 </form>
+                <br/>
             {% endfor %}
                 </ul>
         {% else %}

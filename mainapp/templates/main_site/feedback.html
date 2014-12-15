@@ -23,8 +23,8 @@
 
             <div id="login_block">
             {% if user.is_authenticated %}
-            <h3>{{ user.username }} is logged in!</h3>
-              <li><a href="/feedback_versions/">View feedback versions</a> </li>
+            <h4>{{ user.username }} is logged in!</h4>
+              <li><a href="/feedback_versions/">Feedback history</a> </li>
             <li> <a href="/logout/">Logout</a> </li>
             {% else %}
                 <li> <a href="/register/">Register</a> </li>
